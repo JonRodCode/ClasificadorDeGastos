@@ -1,5 +1,6 @@
 package controller;
 
+import enums.CamposAOmitir;
 import model.Especificaciones;
 import model.GastoBasico;
 import model.PedidoAClasificar;
@@ -75,7 +76,8 @@ public class ClasificacionController {
                         Object value = field.get(gasto); //Obtenemos el valor, o sea la excepcion (Gasto)
                         String nameKey = field.getName();
                         if (value != null && !(value instanceof String && ((String) value).isBlank()) &&
-                                !nameKey.equals("monto") && !nameKey.equals("marcado")) { //obviamos estos atributos de la excepcion
+                                //obviamos estos atributos de la excepcion
+                                !nameKey.equals(CamposAOmitir.Monto.name()) && !nameKey.equals(CamposAOmitir.Marcado.name())) {
                             contador++;
                             if (field.getName().equals("categoria")) {
                                 categoriaTieneValor = true;
