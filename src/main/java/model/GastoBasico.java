@@ -1,10 +1,20 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import enums.TipoExcepcion;
 import enums.TipoImporte;
 import java.time.LocalDate;
 import java.util.List;
 
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "tipo")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = GastoBasico.class, name = "basico"),
+        @JsonSubTypes.Type(value = GastoTarjeta.class, name = "debito"),
+        @JsonSubTypes.Type(value = GastoCreditoCuotas.class, name = "credito"),
+        @JsonSubTypes.Type(value = GastoPrestamo.class, name = "prestamo")
+})
 public class GastoBasico {
 
     private String persona;

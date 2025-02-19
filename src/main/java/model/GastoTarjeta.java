@@ -7,7 +7,6 @@ import java.util.List;
 public class GastoTarjeta extends GastoBasico{
     private String mesDelResumen;
     private String tarjeta; //Visa, Master, etc
-    private boolean esTitular;
     private TipoTarjeta tipoTarjeta;
     private String aNombreDe;
     private String banco;
@@ -28,14 +27,6 @@ public class GastoTarjeta extends GastoBasico{
 
     public void setTarjeta(String tarjeta) {
         this.tarjeta = tarjeta;
-    }
-
-    public boolean isEsTitular() {
-        return esTitular;
-    }
-
-    public void setEsTitular(boolean esTitular) {
-        this.esTitular = esTitular;
     }
 
     public TipoTarjeta getTipoTarjeta() {
