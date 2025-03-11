@@ -71,11 +71,11 @@ public class ClasificacionServiceImpl implements ClasificacionService {
             // Vamos a clasificar los gastos que no esten marcados como Excepcion
             if (gasto.getExcepcion().equals(TipoExcepcion.Nula)) {
 
-                // La 1ra clasificacion es la fuenteDelGasto segun el nombre del consumo, aplica solo a las tarjetas
-                if (gasto instanceof GastoTarjeta) {
+                // La 1ra clasificacion es la fuenteDelGasto segun el nombre del consumo, aplica solo a las tarjetas de credito
+                if (gasto instanceof GastoCreditoCuotas) {
                     for (Map.Entry<String, List<String>> fuenteDelGasto : especificaciones.getFuenteDelGasto().entrySet()) {
 
-                        if (fuenteDelGasto.getValue().contains(((GastoTarjeta) gasto).getNombreConsumo())) {
+                        if (fuenteDelGasto.getValue().contains(((GastoCreditoCuotas) gasto).getNombreConsumo())) {
                             gasto.setFuenteDelGasto(fuenteDelGasto.getKey());
                             break;
                         }
@@ -105,13 +105,15 @@ public class ClasificacionServiceImpl implements ClasificacionService {
 
             // En este if vamos a ver si la excepcion no tiene diferencias de sus datos con la del gasto
             // Obviamos si el dato es null o si esta vacio, lo que importa es si es distinto a eso
+            if (gasto.getClass() != excepcion.getClass()) {
+                continue;
+            }
 
             if ((Objects.equals(gasto.getPersona(), excepcion.getPersona()) || excepcion.getPersona() == null || excepcion.getPersona().isEmpty()) &&
-                    (Objects.equals(gasto.getDetalleConsumo(), excepcion.getDetalleConsumo()) || excepcion.getDetalleConsumo() == null || excepcion.getDetalleConsumo().isEmpty()) &&
+                    (Objects.equals(gasto.getDetalle(), excepcion.getDetalle()) || excepcion.getDetalle() == null || excepcion.getDetalle().isEmpty()) &&
                     (Objects.equals(gasto.getFuenteDelGasto(), excepcion.getFuenteDelGasto()) || excepcion.getFuenteDelGasto() == null || excepcion.getFuenteDelGasto().isEmpty()) &&
                     (Objects.equals(gasto.getCategoria(), excepcion.getCategoria()) || excepcion.getCategoria() == null || excepcion.getCategoria().isEmpty()) &&
-                    (Objects.equals(gasto.getTipoDeImporte(), excepcion.getTipoDeImporte()) || excepcion.getTipoDeImporte() == null) &&
-                    (Objects.equals(gasto.getFecha(), excepcion.getFecha()) || excepcion.getFecha() == null)) {
+                    (Objects.equals(gasto.getTipoDeImporte(), excepcion.getTipoDeImporte()) || excepcion.getTipoDeImporte() == null)) {
 
                 // Corroboramos si es un GastoTarjeta
                 if (gasto instanceof GastoTarjeta && excepcion instanceof GastoTarjeta) {
@@ -121,11 +123,19 @@ public class ClasificacionServiceImpl implements ClasificacionService {
                             (Objects.equals(gTarjet.getTipoTarjeta(), excepTarjet.getTipoTarjeta()) || excepTarjet.getTipoTarjeta() == null) &&
                             (Objects.equals(gTarjet.getaNombreDe(), excepTarjet.getaNombreDe()) || excepTarjet.getaNombreDe() == null || excepTarjet.getaNombreDe().isEmpty()) &&
                             (Objects.equals(gTarjet.getBanco(), excepTarjet.getBanco()) || excepTarjet.getBanco() == null || excepTarjet.getBanco().isEmpty()) &&
-                            (gTarjet.getNumFinalTarjeta() == excepTarjet.getNumFinalTarjeta() || excepTarjet.getNumFinalTarjeta() == 0) &&
-                            (Objects.equals(gTarjet.getNombreConsumo(), excepTarjet.getNombreConsumo()) || excepTarjet.getNombreConsumo() == null || excepTarjet.getNombreConsumo().isEmpty())) {
+                            (gTarjet.getNumFinalTarjeta() == excepTarjet.getNumFinalTarjeta() || excepTarjet.getNumFinalTarjeta() == 0)
+                            ) {
 
                         return true;
                     }
+                    if (gasto instanceof GastoCreditoCuotas && excepcion instanceof GastoCreditoCuotas) {
+                        GastoCreditoCuotas gCredito = (GastoCreditoCuotas) gasto;
+                        GastoCreditoCuotas excepCredito = (GastoCreditoCuotas) excepcion;
+                        if (Objects.equals(gCredito.getNombreConsumo(), excepCredito.getNombreConsumo()) || excepCredito.getNombreConsumo() == null || excepCredito.getNombreConsumo().isEmpty()){
+                            return true;
+                        }
+                    }
+
                 }
                 // Si no es un GastoTarjeta, corroboramos si es un GastoPrestamo
                 else if (gasto instanceof GastoPrestamo && excepcion instanceof GastoPrestamo) {
