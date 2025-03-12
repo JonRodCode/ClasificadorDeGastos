@@ -72,9 +72,8 @@ public class ClasificacionServiceImpl implements ClasificacionService {
             if (gasto.getExcepcion().equals(TipoExcepcion.Nula)) {
 
                 // La 1ra clasificacion es la fuenteDelGasto segun el nombre del consumo, aplica solo a las tarjetas de credito
-                if (gasto instanceof GastoCreditoCuotas) {
+                if (gasto instanceof GastoCreditoCuotas && !((GastoCreditoCuotas) gasto).getNombreConsumo().isEmpty() ) {
                     for (Map.Entry<String, List<String>> fuenteDelGasto : especificaciones.getFuenteDelGasto().entrySet()) {
-
                         if (fuenteDelGasto.getValue().contains(((GastoCreditoCuotas) gasto).getNombreConsumo())) {
                             gasto.setFuenteDelGasto(fuenteDelGasto.getKey());
                             break;
