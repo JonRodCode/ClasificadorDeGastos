@@ -1,7 +1,7 @@
 package enums;
 
 public enum TipoTarjeta {
-    Titular("Titular"), Extension("Extensión");
+    Titular("Titular"), Extensión("Extensión");
 
     private String code;
 
